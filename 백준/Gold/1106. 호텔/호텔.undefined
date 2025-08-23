@@ -1,0 +1,54 @@
+#pragma GCC optimize("O3")
+#include <bits/stdc++.h>
+using namespace std;
+
+#define rep(i, a, b) for (int(i) = (a); i < (b); ++(i))
+#define all(x) (x).begin(), (x).end()
+#define sz(x) (int)(x).size()
+#define x first
+#define y second
+#define int long long
+
+using pii = pair<int, int>;
+const int INF = 2e15;
+
+void solve()
+{
+    int M, N;
+    cin >> M >> N;
+    vector<int> dp(M + 1, INF);
+    vector<pii> a(N);
+    for (int i = 0; i < N; ++i)
+    {
+        cin >> a[i].x >> a[i].y;
+    }
+    dp[0] = 0;
+
+    sort(all(a),[M](pii &x, pii &y){
+        int xx = (M + x.x - 1LL) / x.x, yy = (M + y.x - 1LL) / y.x;
+        if (xx == yy)
+        {
+            return x.y < y.y;
+        }
+        return xx < yy;
+    });
+
+    for (int i = 0; i < N; ++i)
+    {
+        int cost = a[i].x , val = a[i].y;
+        for (int j = 1; j <= M; ++j)
+        {
+            int idx = max(0LL, j - val);
+            dp[j] = min(dp[j], dp[idx] + cost);
+        }
+    }
+    cout << dp[M];
+}
+
+signed main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    solve();
+    return 0;
+}
